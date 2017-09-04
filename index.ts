@@ -1,10 +1,12 @@
 import * as express from 'express'
 import * as bodyParser from 'body-parser';
+import { LogFileWriter } from "./filewriter";
 
 const app = express();
 const port = process.env.PORT || 3001
 app.use(bodyParser.json());
 
+const fileWriter = new LogFileWriter();
 
 app.use(function (req, res, next) {
     // Website you wish to allow to connect
@@ -21,7 +23,8 @@ app.use(function (req, res, next) {
 });
 
 app.post('/logwriter', (req: any, res: any)=> {
-    console.log(req.body);
+    console.log(req.body.toString());
+    fileWriter.writeMessage(req.body);
 });
 app.listen(port,(err)=> {
     console.log('Listening on port : ', port);
